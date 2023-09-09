@@ -1,4 +1,4 @@
-#+TITLE:trivial-toplevel-prompt
+#+TITLE:Trivial Toplevel Prompt
 
 Trivial Toplevel Prompt is a petty portability library to set the
 implementation-specific REPL prompt to a new, possibly more useful,
