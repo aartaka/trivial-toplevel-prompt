@@ -45,12 +45,12 @@ stepping arguments.
 
 * Examples
 
-Here's a simple format control example: just skip the process name, print package name and command number.
+Here's a simple (=CL-USER(29)=) format control example: just skip the process name, print package name and command number.
 #+begin_src lisp
   (trivial-toplevel-prompt:set-toplevel-prompt "~*~a(~d): ")
 #+end_src
 
-And a more involved, Allegro-style prompt:
+And a more involved, Allegro-style (=[4si] CL-USER(29):=) prompt:
 #+begin_src lisp
   (trivial-toplevel-prompt:set-toplevel-prompt
    (lambda (stream process/thread-name package-name
