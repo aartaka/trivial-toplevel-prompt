@@ -2,7 +2,8 @@
 
 Trivial Toplevel Prompt is a petty portability library to set the
 implementation-specific REPL prompt to a new, possibly more useful,
-value. Nothing else.
+value. It allows showing the inspect/debug/stepping stata alongside
+the command number, current package, and current process or thread.
 
 Tested on SBCL, CCL, ECL, ABCL, CLISP, and Allegro CL (basically all
 the implementations I have available). Help in supporting other
