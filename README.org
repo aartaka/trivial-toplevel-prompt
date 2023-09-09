@@ -22,7 +22,7 @@ And then load ~:trivial-toplevel-prompt~ in the REPL:
   (ql:quickload :trivial-toplevel-prompt)
 #+end_src
 
-* Examples
+* APIs
 
 The main API function is =set-toplevel-prompt=. The values that it
 accepts are:
@@ -44,11 +44,14 @@ Note that some implementations have custom REPLs for stepping and
 inspection, so =set-toplevel-prompt= will be useless for inspect and
 stepping arguments.
 
+Then there's =reset-toplevel-prompt= to undo the effect of =set-toplevel-prompt=, basically restoring the previous prompt state.
+
 * Examples
 
-Here's a simple (=CL-USER(29)=) format control example: just skip the process name, print package name and command number.
+Here's a simple format control example: just skip the process name, print package name and command number.
 #+begin_src lisp
   (trivial-toplevel-prompt:set-toplevel-prompt "~*~a(~d): ")
+  ;; CL-USER(7):
 #+end_src
 
 And a more involved, Allegro-style (=[4si] CL-USER(29):=) prompt:
@@ -61,4 +64,14 @@ And a more involved, Allegro-style (=[4si] CL-USER(29):=) prompt:
        (format stream "[~@[~d~]~@[s~*~]~@[i~*~]] "
                debug-level stepping-p inspect-p))
      (format stream "~a(~d): " package-name command-number)))
+  ;; [4si] CL-USER(29):
 #+end_src
+
+And then reset it:
+#+begin_src lisp
+  (trivial-toplevel-prompt::reset-toplevel-prompt)
+  ;; CL-USER(7):
+  (trivial-toplevel-prompt::reset-toplevel-prompt)
+  ;; Back to implementation-specific prompt.
+#+end_src
+
