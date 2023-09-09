@@ -13,7 +13,7 @@
   :pathname "source/"
   :components ((:file "package")
                (:file "trivial-toplevel-prompt"))
-  :in-order-to ((test-op "trivial-toplevel-prompt/tests/compilation")))
+  :in-order-to ((test-op (test-op "trivial-toplevel-prompt/tests/compilation"))))
 
 (defsystem "trivial-toplevel-prompt/tests/compilation"
   :defsystem-depends-on ("nasdf")
