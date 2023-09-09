@@ -43,11 +43,15 @@ Note that some implementations have custom REPLs for stepping and
 inspection, so =set-toplevel-prompt= will be useless for inspect and
 stepping arguments.
 
-#+begin_src lisp
-  ;; Simple CL-USER(29): prompt.
-  (trivial-toplevel-prompt:set-toplevel-prompt "~*~a(~d): ")
+* Examples
 
-  ;; A complex Allegro-style prompt: [4si]CL-USER(29):
+Here's a simple format control example: just skip the process name, print package name and command number.
+#+begin_src lisp
+  (trivial-toplevel-prompt:set-toplevel-prompt "~*~a(~d): ")
+#+end_src
+
+And a more involved, Allegro-style prompt:
+#+begin_src lisp
   (trivial-toplevel-prompt:set-toplevel-prompt
    (lambda (stream process/thread-name package-name
             command-number debug-p debug-level stepping-p inspect-p)
