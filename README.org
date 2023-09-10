@@ -28,6 +28,12 @@ And then load ~:trivial-toplevel-prompt~ in the REPL:
   (ql:quickload :trivial-toplevel-prompt)
 #+end_src
 
+Putting it all together, you can install Trivial Toplevel Prompt with this shell incantation (SBCL used as an example):
+#+begin_src sh
+  sbcl --eval "(require 'asdf)" --eval '(asdf:load-asd #p"~/common-lisp/trivial-toplevel-prompt/nasdf/nasdf.asd")' --eval '(asdf:load-asd #p"~/common-lisp/trivial-toplevel-prompt/trivial-toplevel-prompt.asd")' --eval '(asdf:load-system :trivial-toplevel-prompt)'
+#+end_src
+
+
 * APIs
 
 The main API function is =set-toplevel-prompt=. The values that it
