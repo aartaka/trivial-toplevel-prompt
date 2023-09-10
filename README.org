@@ -12,7 +12,7 @@ implementations is much appreciated!
 * Getting started
 Clone the Git repository:
 #+begin_src sh
-  git clone --recursive https://github.com/aartaka/trivial-toplevel-prompt ~/common-lisp/
+  git clone https://github.com/aartaka/trivial-toplevel-prompt ~/common-lisp/
 #+end_src
 
 And then load ~:trivial-toplevel-prompt~ in the REPL:
