@@ -15,24 +15,12 @@ Clone the Git repository:
   git clone https://github.com/aartaka/trivial-toplevel-prompt ~/common-lisp/
 #+end_src
 
-You also have to make NASDF accessible to ASDF to extend the
-installation/testing process:
-#+begin_src lisp
-  (asdf:load-asd #p"~/common-lisp/trivial-toplevel-prompt/nasdf/nasdf.asd")
-#+end_src
-
 And then load ~:trivial-toplevel-prompt~ in the REPL:
 #+begin_src lisp
   (asdf:load-system :trivial-toplevel-prompt)
   ;; or, if you use Quicklisp
   (ql:quickload :trivial-toplevel-prompt)
 #+end_src
-
-Putting it all together, you can install Trivial Toplevel Prompt with this shell incantation (SBCL used as an example):
-#+begin_src sh
-  sbcl --eval "(require 'asdf)" --eval '(asdf:load-asd #p"~/common-lisp/trivial-toplevel-prompt/nasdf/nasdf.asd")' --eval '(asdf:load-asd #p"~/common-lisp/trivial-toplevel-prompt/trivial-toplevel-prompt.asd")' --eval '(asdf:load-system :trivial-toplevel-prompt)'
-#+end_src
-
 
 * APIs
 

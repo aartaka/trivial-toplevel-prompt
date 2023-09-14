@@ -53,7 +53,7 @@
    ;; store, which is read-only and would thus fail.
    ;;
    ;; The official Guix package should use `sbcl-*' inputs though.
-   (native-inputs (list cl-lisp-unit2 cl-nasdf sbcl))
+   (native-inputs (list sbcl))
    (synopsis
     "Portability library to customize CL implementations' REPL prompt.")
    (home-page "https://github.com/aartaka/trivial-toplevel-prompt")
