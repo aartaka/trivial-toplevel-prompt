@@ -10,6 +10,4 @@
   :license  "BSD-3 Clause"
   :version "0.0.1"
   :serial t
-  :pathname "source/"
-  :components ((:file "package")
-               (:file "trivial-toplevel-prompt")))
+  :components ((:file "prompt")))
