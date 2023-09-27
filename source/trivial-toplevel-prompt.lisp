@@ -11,8 +11,11 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
   "Return the prompt to the state before the last `set-toplevel-prompt'."
   (if *previous-prompting-stack*
       #+sbcl
-      (setf sb-int:*repl-prompt-fun*
-            (pop *previous-prompting-stack*))
+      (sb-ext:without-package-locks
+	(destructuring-bind (repl-fun debug-prompt)
+	    (pop *previous-prompting-stack*)
+	  (setf sb-int:*repl-prompt-fun* repl-fun
+		(fdefinition 'sb-debug::debug-prompt) debug-prompt)))
       #+ccl
       (setf (fdefinition 'ccl::print-listener-prompt)
             (pop *previous-prompting-stack*))
@@ -72,17 +75,27 @@ The arguments for format control or function are:
     (declare (ignorable prompt-function))
     #+sbcl
     (progn
-      (push sb-int:*repl-prompt-fun* *previous-prompting-stack*)
-      (setf sb-int:*repl-prompt-fun*
-            (lambda (stream)
-              (fresh-line stream)
-              (funcall prompt-function stream
-                       (sb-thread:thread-name sb-thread:*current-thread*)
-                       (shortest-package-nickname *package*)
-                       nil ;; No history.
-                       (when (plusp sb-debug::*debug-command-level*)
-			 sb-debug::*debug-command-level*)
-                       (sb-impl::stepping-enabled-p) (true (ignore-errors sb-ext::*inspected*))))))
+      (push (list sb-int:*repl-prompt-fun* (fdefinition 'sb-debug::debug-prompt))
+	    *previous-prompting-stack*)
+      (flet ((call (stream)
+	       (fresh-line stream)
+	       (funcall prompt-function stream
+			(sb-thread:thread-name sb-thread:*current-thread*)
+			(shortest-package-nickname *package*)
+			;; FIXME: No history on SBCL. Maybe use frame
+			;; number for history, at least in debugger?
+			nil
+			(when (plusp sb-debug::*debug-command-level*)
+			  sb-debug::*debug-command-level*)
+			(sb-impl::stepping-enabled-p) (true (ignore-errors sb-ext::*inspected*)))))
+	(sb-ext:without-package-locks
+	  (setf (fdefinition 'sb-debug::debug-prompt)
+		(lambda (stream)
+		  (sb-thread::get-foreground)
+		  (call stream))
+		sb-int:*repl-prompt-fun*
+		(lambda (stream)
+		  (call stream))))))
     #+ccl
     (progn
       (push (fdefinition 'ccl::print-listener-prompt)
