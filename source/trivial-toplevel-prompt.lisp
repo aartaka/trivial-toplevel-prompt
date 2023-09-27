@@ -32,7 +32,7 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
               sys::*prompt-break* break
               sys::*prompt-step* step))
       #+abcl
-      (setf *repl-prompt-fun* (pop *previous-prompting-stack*))
+      (setf tpl::*repl-prompt-fun* (pop *previous-prompting-stack*))
       #+allegro
       #-(or sbcl ccl ecl clisp abcl allegro)
       nil
@@ -134,8 +134,8 @@ The arguments for format control or function are:
               (force-output *standard-output*))))
     #+abcl
     (progn
-      (push *repl-prompt-fun* *previous-prompting-stack*)
-      (setf *repl-prompt-fun*
+      (push tpl::*repl-prompt-fun* *previous-prompting-stack*)
+      (setf tpl::*repl-prompt-fun*
             (lambda (stream)
               (fresh-line stream)
               (funcall prompt-function stream
