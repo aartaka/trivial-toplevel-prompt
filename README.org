@@ -51,7 +51,7 @@ Then there's =reset-toplevel-prompt= to undo the effect of =set-toplevel-prompt=
 
 Here's a simple format control example: just skip the process name, print package name and command number.
 #+begin_src lisp
-  (trivial-toplevel-prompt:set-toplevel-prompt "~*~a(~d): ")
+  (trivial-toplevel-prompt:set-toplevel-prompt "~*~a~@[(~d)~]: ")
   ;; CL-USER(7):
 #+end_src
 
@@ -59,12 +59,12 @@ And a more involved, Allegro-style (=[4si] CL-USER(29):=) prompt:
 #+begin_src lisp
   (trivial-toplevel-prompt:set-toplevel-prompt
    (lambda (stream process/thread-name package-name
-            command-number debug-p debug-level stepping-p inspect-p)
+            command-number debug-level stepping-p inspect-p)
      (declare (ignorable process/thread-name))
-     (when (or debug-p stepping-p inspect-p)
+     (when (or debug-level stepping-p inspect-p)
        (format stream "[~@[~d~]~@[s~*~]~@[i~*~]] "
                debug-level stepping-p inspect-p))
-     (format stream "~a(~d): " package-name command-number)))
+     (format stream "~a~@[(~d)~]: " package-name command-number)))
   ;; [4si] CL-USER(29):
 #+end_src
 
