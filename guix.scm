@@ -30,7 +30,7 @@
 (define-public sbcl-trivial-toplevel-prompt
   (package
    (name "sbcl-trivial-toplevel-prompt")
-   (version "0.0.1")
+   (version "0.1.1")
    (source
     (local-file (dirname (current-filename)) #:recursive? #t)
     ;;;; Or this, in case of contributing to Guix.

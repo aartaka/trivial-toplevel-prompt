@@ -8,6 +8,6 @@
   :bug-tracker "https://github.com/aartaka/trivial-toplevel-prompt/issues"
   :source-control (:git "https://github.com/aartaka/trivial-toplevel-prompt.git")
   :license  "BSD-3 Clause"
-  :version "0.0.1"
+  :version "0.1.1"
   :serial t
   :components ((:file "prompt")))
