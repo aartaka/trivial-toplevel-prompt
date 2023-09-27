@@ -38,10 +38,6 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
   (first (sort (cons (package-name package) (package-nicknames package))
                #'< :key #'length)))
 
-;; FIXME: Remove it and be honest about the absence of history.
-(defvar *command-index* -1
-  "REPL command index for implementations that don't have it.")
-
 (defun bool (value)
   "Ensure that VALUE is coerced to a strict NIL/T boolean."
   (not (not value)))
@@ -58,21 +54,20 @@ The arguments for format control or function are:
   format control.
 - Current process/thread name (string).
 - Current package name (string).
-- Current command number (integer).
-- Whether in debugger loop (generalized boolean).
+- Current command number (nullable integer).
+  - NIL if there's no command history for the implementation.
 - Debug level (nullable integer).
-- Whether in the stepping loop (generalized boolean).
-- Whether in the inspect loop (generalized boolean)."
-  ;; FIXME: Why is there debug-p? Isn't debug-level enough? It's a
-  ;; nullable integer, after all...
+  - NIL if not in the debugger or unknown.
+- Whether in the stepping loop (boolean).
+- Whether in the inspect loop (boolean)."
   (let ((prompt-function
           (etypecase prompt-specifier
             (string (lambda (stream process/thread-name package-name
-                             command-number debug-p debug-level stepping-p inspect-p)
+                             command-number debug-level stepping-p inspect-p)
                       (format
                        stream prompt-specifier
                        process/thread-name package-name
-                       command-number debug-p debug-level stepping-p inspect-p)))
+                       command-number debug-level stepping-p inspect-p)))
             (function prompt-specifier))))
     (declare (ignorable prompt-function))
     #+sbcl
@@ -84,8 +79,9 @@ The arguments for format control or function are:
               (funcall prompt-function stream
                        (sb-thread:thread-name sb-thread:*current-thread*)
                        (shortest-package-nickname *package*)
-                       (incf *command-index*)
-                       (plusp sb-debug::*debug-command-level*) sb-debug::*debug-command-level*
+                       nil ;; No history.
+                       (when (plusp sb-debug::*debug-command-level*)
+			 sb-debug::*debug-command-level*)
                        (sb-impl::stepping-enabled-p) (true (ignore-errors sb-ext::*inspected*))))))
     #+ccl
     (progn
@@ -99,8 +95,9 @@ The arguments for format control or function are:
               (funcall prompt-function stream
                        (ccl:process-name ccl:*current-process*)
                        (shortest-package-nickname *package*)
-                       (incf *command-index*)
-                       (plusp ccl::*break-level*) ccl::*break-level*
+                       nil ;; No history on CCL.
+                       (when (plusp ccl::*break-level*)
+			 ccl::*break-level*)
                        ;; CCL doesnt? support stepping?
                        nil
                        ;; @ is an inspector-specific variable on CCL.
@@ -115,8 +112,9 @@ The arguments for format control or function are:
               (funcall prompt-function *standard-output*
                        (or #+threads (string (mp:process-name mp:*current-process*)) "REPL")
                        (shortest-package-nickname *package*)
-                       (incf *command-index*)
-                       (plusp si::*tpl-level*) si::*tpl-level*
+                       nil ;; History not available
+                       (when (plusp si::*tpl-level*)
+			 si::*tpl-level*)
                        (plusp si:*step-level*) (plusp si::*inspect-level*))
               (force-output *standard-output*))))
     #+abcl
@@ -129,7 +127,8 @@ The arguments for format control or function are:
                        (threads:thread-name (threads:current-thread))
                        (shortest-package-nickname *package*)
                        tpl::*cmd-number*
-                       (plusp ext:*debug-level*) ext:*debug-level*
+                       (when (plusp ext:*debug-level*)
+			 ext:*debug-level*)
                        ;; ABCL has no stepping?
                        nil sys::*inspect-break*))))
     #+clisp
@@ -149,7 +148,8 @@ The arguments for format control or function are:
                          ;; threads/processes?
                          "REPL" (shortest-package-nickname *package*)
                          (incf sys::*command-index*)
-                         (and (sys::break-level) (plusp (sys::break-level))) (sys::break-level)
+                         (when (and (sys::break-level) (plusp (sys::break-level)))
+			   (sys::break-level))
                          (plusp (sys::step-level)) (true sys::*inspect-all*))))))
     #+allegro
     (setf tpl:*prompt*
@@ -161,7 +161,7 @@ The arguments for format control or function are:
             (funcall prompt-function stream
                      process-name (shortest-package-nickname package)
                      command-number
-                     break-level break-level
+                     break-level
                      stepping-p inspect-p)))
     #-(or sbcl ccl ecl clisp abcl allegro)
     (warn "Trivial Toplevel Prompt does not support this implementation yet. Help in supporting it!")))
