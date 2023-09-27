@@ -63,6 +63,8 @@ The arguments for format control or function are:
 - Debug level (nullable integer).
 - Whether in the stepping loop (generalized boolean).
 - Whether in the inspect loop (generalized boolean)."
+  ;; FIXME: Why is there debug-p? Isn't debug-level enough? It's a
+  ;; nullable integer, after all...
   (let ((prompt-function
           (etypecase prompt-specifier
             (string (lambda (stream process/thread-name package-name
