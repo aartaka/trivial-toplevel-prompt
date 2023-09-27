@@ -23,6 +23,12 @@ And then load ~:trivial-toplevel-prompt~ in the REPL:
   (ql:quickload :trivial-toplevel-prompt)
 #+end_src
 
+You can also install Trivial Toplevel Prompt via Guix, using the
+bundled =guix.scm= file:
+#+begin_src sh
+  guix package -f guix.scm
+#+end_src
+
 * APIs
 
 The main API function is =set-toplevel-prompt=. The values that it
