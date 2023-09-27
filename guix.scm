@@ -45,23 +45,17 @@
     ;;     "SPECIFY-HASH")))
     )
    (build-system asdf-build-system/sbcl)
-   ;; We use `cl-*' inputs and not `sbcl-*' ones so that CCL users can also use
-   ;; this Guix manifests.
-   ;;
-   ;; Another reason is to not fail when an input dependency is found in
-   ;; ~/common-lisp, which would trigger a rebuild of the SBCL input in the
-   ;; store, which is read-only and would thus fail.
-   ;;
-   ;; The official Guix package should use `sbcl-*' inputs though.
-   (native-inputs (list sbcl))
    (synopsis
     "Portability library to customize CL implementations' REPL prompt.")
    (home-page "https://github.com/aartaka/trivial-toplevel-prompt")
    (description "Trivial Toplevel Prompt allows to customize Lisp REPL prompt.
 
-The only function that Trivial Toplevel Prompt has is
-@code{set-toplevel-prompt}, which allows to redefine the
+Functions that Trivial Toplevel Prompt has are
+@itemize
+@item @code{set-toplevel-prompt}, which allows to redefine the
 implementation-specific prompt printers.
+@item @code{reset-toplevel-prompt}, which restored the previous state
+@end itemize
 
 Currently works on SBCL, CCL, ECL, ABCL, CLISP, and Allegro CL.")
    (license license:bsd-3)))
