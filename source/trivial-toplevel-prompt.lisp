@@ -17,8 +17,10 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
 	  (setf sb-int:*repl-prompt-fun* repl-fun
 		(fdefinition 'sb-debug::debug-prompt) debug-prompt)))
       #+ccl
-      (setf (fdefinition 'ccl::print-listener-prompt)
-            (pop *previous-prompting-stack*))
+      (progn
+	(fmakunbound 'ccl::print-listener-prompt)
+	(setf (fdefinition 'ccl::print-listener-prompt)
+	      (pop *previous-prompting-stack*)))
       #+ecl
       (setf si::*tpl-prompt-hook* (pop *previous-prompting-stack*))
       #+clisp
