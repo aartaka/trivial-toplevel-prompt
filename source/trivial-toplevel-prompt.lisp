@@ -41,6 +41,10 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
 (defvar *command-index* -1
   "REPL command index for implementations that don't have it.")
 
+(defun bool (value)
+  "Ensure that VALUE is coerced to a strict NIL/T boolean."
+  (not (not value)))
+
 (defun set-toplevel-prompt (prompt-specifier)
   "Redefine REPL prompt to be PROMPT-SPECIFIER.
 
@@ -79,7 +83,7 @@ The arguments for format control or function are:
                        (shortest-package-nickname *package*)
                        (incf *command-index*)
                        (plusp sb-debug::*debug-command-level*) sb-debug::*debug-command-level*
-                       (sb-impl::stepping-enabled-p) (not (not (ignore-errors sb-ext::*inspected*)))))))
+                       (sb-impl::stepping-enabled-p) (true (ignore-errors sb-ext::*inspected*))))))
     #+ccl
     (progn
       (push (fdefinition 'ccl::print-listener-prompt)
@@ -97,7 +101,7 @@ The arguments for format control or function are:
                        ;; CCL doesnt? support stepping?
                        nil
                        ;; @ is an inspector-specific variable on CCL.
-                       ccl::@)
+                       (true ccl::@))
               (force-output stream))))
     #+ecl
     (progn
@@ -143,7 +147,7 @@ The arguments for format control or function are:
                          "REPL" (shortest-package-nickname *package*)
                          (incf sys::*command-index*)
                          (and (sys::break-level) (plusp (sys::break-level))) (sys::break-level)
-                         (plusp (sys::step-level)) (not (not sys::*inspect-all*)))))))
+                         (plusp (sys::step-level)) (true sys::*inspect-all*))))))
     #+allegro
     (setf tpl:*prompt*
           (lambda (stream process-name focused-process-name
