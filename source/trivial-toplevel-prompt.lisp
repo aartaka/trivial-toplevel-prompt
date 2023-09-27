@@ -38,7 +38,7 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
   (first (sort (cons (package-name package) (package-nicknames package))
                #'< :key #'length)))
 
-(defun bool (value)
+(defun true (value)
   "Ensure that VALUE is coerced to a strict NIL/T boolean."
   (not (not value)))
 
