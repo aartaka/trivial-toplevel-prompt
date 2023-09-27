@@ -34,6 +34,7 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
       #+abcl
       (setf tpl::*repl-prompt-fun* (pop *previous-prompting-stack*))
       #+allegro
+      (setf tpl:*prompt* (pop *previous-prompting-stack*))
       #-(or sbcl ccl ecl clisp abcl allegro)
       nil
       (warn "Nothing to reset: no previous state saved."))
@@ -167,16 +168,18 @@ The arguments for format control or function are:
 			   (sys::break-level))
                          (plusp (sys::step-level)) (true sys::*inspect-all*))))))
     #+allegro
-    (setf tpl:*prompt*
-          (lambda (stream process-name focused-process-name
-                   stepping-p break-level continuable-p inspect-p
-                   package command-number)
-            (declare (ignore focused-process-name continuable-p))
-            (fresh-line stream)
-            (funcall prompt-function stream
-                     process-name (shortest-package-nickname package)
-                     command-number
-                     break-level
-                     stepping-p inspect-p)))
+    (progn
+      (push tpl:*prompt* *previous-prompting-stack*)
+      (setf tpl:*prompt*
+            (lambda (stream process-name focused-process-name
+                     stepping-p break-level continuable-p inspect-p
+                     package command-number)
+              (declare (ignore focused-process-name continuable-p))
+              (fresh-line stream)
+              (funcall prompt-function stream
+                       process-name (shortest-package-nickname package)
+                       command-number
+                       break-level
+                       stepping-p inspect-p))))
     #-(or sbcl ccl ecl clisp abcl allegro)
     (warn "Trivial Toplevel Prompt does not support this implementation yet. Help in supporting it!")))
