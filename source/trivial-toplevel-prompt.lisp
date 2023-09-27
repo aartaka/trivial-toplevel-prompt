@@ -38,6 +38,7 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
   (first (sort (cons (package-name package) (package-nicknames package))
                #'< :key #'length)))
 
+;; FIXME: Remove it and be honest about the absence of history.
 (defvar *command-index* -1
   "REPL command index for implementations that don't have it.")
 
