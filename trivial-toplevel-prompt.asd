@@ -2,7 +2,7 @@
 ;;;; SPDX-License-Identifier: BSD-3 Clause
 
 (defsystem "trivial-toplevel-prompt"
-  :description "Describe trivial-toplevel-prompt here"
+  :description "Portability library to customize REPL prompts."
   :author "Artyom Bologov"
   :homepage "https://github.com/aartaka/trivial-toplevel-prompt"
   :bug-tracker "https://github.com/aartaka/trivial-toplevel-prompt/issues"
