@@ -5,10 +5,10 @@ implementation-specific REPL prompt to a new, possibly more useful,
 value. It allows showing the inspect/debug/stepping statuses alongside
 the command number, current package, and current process or thread.
 
-Tested on SBCL, CCL, ECL, ABCL, CLISP, and Allegro CL (basically all
-the implementations I can run). Help in supporting other
-implementations (like [[http://www.lispworks.com/documentation/lw80/lw/lw-lispworks-87.htm#lispworks_marker-line-3817][LispWorks with its *prompt*]]) is much
-appreciated!
+Tested on SBCL, CCL, ECL, ABCL, CLISP, Allegro CL (basically all the
+implementations I can run), and CMUCL (untested, incomplete). Help in
+supporting other implementations (like [[http://www.lispworks.com/documentation/lw80/lw/lw-lispworks-87.htm#lispworks_marker-line-3817][LispWorks with its *prompt*]]) is
+much appreciated!
 
 * Getting started
 Clone the Git repository:

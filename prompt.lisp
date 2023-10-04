@@ -45,7 +45,12 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
       (setf tpl::*repl-prompt-fun* (pop *previous-prompting-stack*))
       #+allegro
       (setf tpl:*prompt* (pop *previous-prompting-stack*))
-      #-(or sbcl ccl ecl clisp abcl allegro)
+      #+cmucl
+      (destructuring-bind (repl-fun debug-prompt)
+	  (pop *previous-prompting-stack*)
+	(setf ext:*prompt* repl-fun
+	      debug:*debug-prompt* debug-prompt))
+      #-(or sbcl ccl ecl clisp abcl allegro cmucl)
       nil
       (warn "Nothing to reset: no previous state saved."))
   nil)
@@ -86,6 +91,25 @@ The arguments for format control or function are:
                        command-number debug-level stepping-p inspect-p)))
             (function prompt-specifier))))
     (declare (ignorable prompt-function))
+    #+cmucl
+    (progn
+      (push (list ext:*prompt* debug:*debug-prompt*) *previous-prompting-stack*)
+      (flet ((call (stream)
+	       (fresh-line stream)
+	       (funcall prompt-function stream
+			"REPL"
+			(shortest-package-nickname *package*)
+			;; No history on CMUCL, unless in debugger?
+			(when (plusp debug::*debug-command-level*)
+			  (di:frame-number debug::*current-frame*))
+			(when (plusp debug::*debug-command-level*)
+			  debug::*debug-command-level*)
+			nil nil)))
+	(setf ext:*prompt* (lambda ()
+			     (with-output-to-string (s)
+			       (call s)))
+	      debug:*debug-prompt* (lambda ()
+				     (call *debug-io*)))))
     #+sbcl
     (progn
       (push (list sb-int:*repl-prompt-fun* (fdefinition 'sb-debug::debug-prompt))
@@ -191,5 +215,5 @@ The arguments for format control or function are:
                        command-number
                        break-level
                        stepping-p inspect-p))))
-    #-(or sbcl ccl ecl clisp abcl allegro)
+    #-(or sbcl ccl ecl clisp abcl allegro cmucl)
     (warn "Trivial Toplevel Prompt does not support this implementation yet. Help in supporting it!")))

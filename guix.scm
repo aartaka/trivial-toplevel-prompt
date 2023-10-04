@@ -57,7 +57,7 @@ implementation-specific prompt printers.
 @item @code{reset-toplevel-prompt}, which restored the previous state
 @end itemize
 
-Currently works on SBCL, CCL, ECL, ABCL, CLISP, and Allegro CL.")
+Currently works on SBCL, CCL, ECL, ABCL, CLISP, CMUCL, and Allegro CL.")
    (license license:bsd-3)))
 
 (define-public cl-trivial-toplevel-prompt
