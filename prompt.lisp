@@ -22,15 +22,15 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
   (if *previous-prompting-stack*
       #+sbcl
       (sb-ext:without-package-locks
-	(destructuring-bind (repl-fun debug-prompt)
-	    (pop *previous-prompting-stack*)
-	  (setf sb-int:*repl-prompt-fun* repl-fun
-		(fdefinition 'sb-debug::debug-prompt) debug-prompt)))
+        (destructuring-bind (repl-fun debug-prompt)
+            (pop *previous-prompting-stack*)
+          (setf sb-int:*repl-prompt-fun* repl-fun
+                (fdefinition 'sb-debug::debug-prompt) debug-prompt)))
       #+ccl
       (progn
-	(fmakunbound 'ccl::print-listener-prompt)
-	(setf (fdefinition 'ccl::print-listener-prompt)
-	      (pop *previous-prompting-stack*)))
+        (fmakunbound 'ccl::print-listener-prompt)
+        (setf (fdefinition 'ccl::print-listener-prompt)
+              (pop *previous-prompting-stack*)))
       #+ecl
       (setf si::*tpl-prompt-hook* (pop *previous-prompting-stack*))
       #+clisp
@@ -47,9 +47,9 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
       (setf tpl:*prompt* (pop *previous-prompting-stack*))
       #+cmucl
       (destructuring-bind (repl-fun debug-prompt)
-	  (pop *previous-prompting-stack*)
-	(setf ext:*prompt* repl-fun
-	      debug:*debug-prompt* debug-prompt))
+          (pop *previous-prompting-stack*)
+        (setf ext:*prompt* repl-fun
+              debug:*debug-prompt* debug-prompt))
       #-(or sbcl ccl ecl clisp abcl allegro cmucl)
       nil
       (warn "Nothing to reset: no previous state saved."))
@@ -95,44 +95,44 @@ The arguments for format control or function are:
     (progn
       (push (list ext:*prompt* debug:*debug-prompt*) *previous-prompting-stack*)
       (flet ((call (stream)
-	       (fresh-line stream)
-	       (funcall prompt-function stream
-			"REPL"
-			(shortest-package-nickname *package*)
-			;; No history on CMUCL, unless in debugger?
-			(when (plusp debug::*debug-command-level*)
-			  (di:frame-number debug::*current-frame*))
-			(when (plusp debug::*debug-command-level*)
-			  debug::*debug-command-level*)
-			nil nil)))
-	(setf ext:*prompt* (lambda ()
-			     (with-output-to-string (s)
-			       (call s)))
-	      debug:*debug-prompt* (lambda ()
-				     (call *debug-io*)))))
+               (fresh-line stream)
+               (funcall prompt-function stream
+                        "REPL"
+                        (shortest-package-nickname *package*)
+                        ;; No history on CMUCL, unless in debugger?
+                        (when (plusp debug::*debug-command-level*)
+                          (di:frame-number debug::*current-frame*))
+                        (when (plusp debug::*debug-command-level*)
+                          debug::*debug-command-level*)
+                        nil nil)))
+        (setf ext:*prompt* (lambda ()
+                             (with-output-to-string (s)
+                               (call s)))
+              debug:*debug-prompt* (lambda ()
+                                     (call *debug-io*)))))
     #+sbcl
     (progn
       (push (list sb-int:*repl-prompt-fun* (fdefinition 'sb-debug::debug-prompt))
-	    *previous-prompting-stack*)
+            *previous-prompting-stack*)
       (flet ((call (stream)
-	       (fresh-line stream)
-	       (funcall prompt-function stream
-			(sb-thread:thread-name sb-thread:*current-thread*)
-			(shortest-package-nickname *package*)
-			;; FIXME: No history on SBCL. Maybe use frame
-			;; number for history, at least in debugger?
-			nil
-			(when (plusp sb-debug::*debug-command-level*)
-			  sb-debug::*debug-command-level*)
-			(sb-impl::stepping-enabled-p) (true (ignore-errors sb-ext::*inspected*)))))
-	(sb-ext:without-package-locks
-	  (setf (fdefinition 'sb-debug::debug-prompt)
-		(lambda (stream)
-		  (sb-thread::get-foreground)
-		  (call stream))
-		sb-int:*repl-prompt-fun*
-		(lambda (stream)
-		  (call stream))))))
+               (fresh-line stream)
+               (funcall prompt-function stream
+                        (sb-thread:thread-name sb-thread:*current-thread*)
+                        (shortest-package-nickname *package*)
+                        ;; FIXME: No history on SBCL. Maybe use frame
+                        ;; number for history, at least in debugger?
+                        nil
+                        (when (plusp sb-debug::*debug-command-level*)
+                          sb-debug::*debug-command-level*)
+                        (sb-impl::stepping-enabled-p) (true (ignore-errors sb-ext::*inspected*)))))
+        (sb-ext:without-package-locks
+          (setf (fdefinition 'sb-debug::debug-prompt)
+                (lambda (stream)
+                  (sb-thread::get-foreground)
+                  (call stream))
+                sb-int:*repl-prompt-fun*
+                (lambda (stream)
+                  (call stream))))))
     #+ccl
     (progn
       (push (fdefinition 'ccl::print-listener-prompt)
@@ -147,7 +147,7 @@ The arguments for format control or function are:
                        (shortest-package-nickname *package*)
                        nil ;; No history on CCL.
                        (when (plusp ccl::*break-level*)
-			 ccl::*break-level*)
+                         ccl::*break-level*)
                        ;; CCL doesnt? support stepping?
                        nil
                        ;; @ is an inspector-specific variable on CCL.
@@ -164,7 +164,7 @@ The arguments for format control or function are:
                        (shortest-package-nickname *package*)
                        nil ;; History not available
                        (when (plusp si::*tpl-level*)
-			 si::*tpl-level*)
+                         si::*tpl-level*)
                        (plusp si:*step-level*) (plusp si::*inspect-level*))
               (force-output *standard-output*))))
     #+abcl
@@ -178,7 +178,7 @@ The arguments for format control or function are:
                        (shortest-package-nickname *package*)
                        tpl::*cmd-number*
                        (when (plusp ext:*debug-level*)
-			 ext:*debug-level*)
+                         ext:*debug-level*)
                        ;; ABCL has no stepping?
                        nil sys::*inspect-break*))))
     #+clisp
@@ -199,7 +199,7 @@ The arguments for format control or function are:
                          "REPL" (shortest-package-nickname *package*)
                          (incf sys::*command-index*)
                          (when (and (sys::break-level) (plusp (sys::break-level)))
-			   (sys::break-level))
+                           (sys::break-level))
                          (plusp (sys::step-level)) (true sys::*inspect-all*))))))
     #+allegro
     (progn
