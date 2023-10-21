@@ -10,4 +10,5 @@
   :license  "BSD-3 Clause"
   :version "0.1.1"
   :serial t
-  :components ((:file "prompt")))
+  :components ((:file "package")
+               (:file "prompt")))

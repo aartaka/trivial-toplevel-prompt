@@ -1,16 +1,6 @@
 ;;;; SPDX-FileCopyrightText: Artyom Bologov
 ;;;; SPDX-License-Identifier: BSD-3 Clause
 
-(uiop:define-package :trivial-toplevel-prompt
-  (:use :common-lisp)
-  (:export #:set-toplevel-prompt #:reset-toplevel-prompt)
-  (:documentation "`trivial-toplevel-prompt' is a library to customize REPL prompts.
-
-The main entry point is `set-toplevel-prompt', which redefines
-implementation-specific prompts to follow a certain format.
-
-`reset-toplevel-prompt' is an undo operation that restored the prompt
-to the state before the last `set-toplevel-prompt' was invoked."))
 (in-package :trivial-toplevel-prompt)
 
 (defvar *previous-prompting-stack* nil
@@ -24,8 +14,10 @@ Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
       (sb-ext:without-package-locks
         (destructuring-bind (repl-fun debug-prompt)
             (pop *previous-prompting-stack*)
-          (setf sb-int:*repl-prompt-fun* repl-fun
-                (fdefinition 'sb-debug::debug-prompt) debug-prompt)))
+          (setf
+           #+sb-aclrepl sb-aclrepl:*prompt*
+           #-sb-aclrepl sb-int:*repl-prompt-fun* repl-fun
+           (fdefinition 'sb-debug::debug-prompt) debug-prompt)))
       #+ccl
       (progn
         (fmakunbound 'ccl::print-listener-prompt)
@@ -80,7 +72,9 @@ The arguments for format control or function are:
 - Debug level (nullable integer).
   - NIL if not in the debugger or unknown.
 - Whether in the stepping loop (boolean).
-- Whether in the inspect loop (boolean)."
+- Whether in the inspect loop (boolean).
+
+Always returns NIL."
   (let ((prompt-function
           (etypecase prompt-specifier
             (string (lambda (stream process/thread-name package-name
@@ -112,7 +106,10 @@ The arguments for format control or function are:
                                      (call *debug-io*)))))
     #+sbcl
     (progn
-      (push (list sb-int:*repl-prompt-fun* (fdefinition 'sb-debug::debug-prompt))
+      (push (list
+             #+sb-aclrepl sb-aclrepl:*prompt*
+             #-sb-aclrepl sb-int:*repl-prompt-fun*
+             (fdefinition 'sb-debug::debug-prompt))
             *previous-prompting-stack*)
       (flet ((call (stream)
                (fresh-line stream)
@@ -126,12 +123,22 @@ The arguments for format control or function are:
                           sb-debug::*debug-command-level*)
                         (sb-impl::stepping-enabled-p) (true (ignore-errors sb-ext::*inspected*)))))
         (sb-ext:without-package-locks
+          #+sb-aclrepl
+          (setf sb-aclrepl:*prompt*
+                (lambda (break-level frame-number inspect-break continuable-p package-name cmd-num)
+                  (declare (ignorable frame-number continuable-p))
+                  (with-output-to-string (s)
+                    (funcall prompt-function s
+                             sb-thread:*current-thread* package-name
+                             cmd-num
+                             break-level (sb-impl::stepping-enabled-p) (true inspect-break)))))
+          #-sb-aclrepl
+          (setf sb-int:*repl-prompt-fun*
+                (lambda (stream)
+                  (call stream)))
           (setf (fdefinition 'sb-debug::debug-prompt)
                 (lambda (stream)
                   (sb-thread::get-foreground)
-                  (call stream))
-                sb-int:*repl-prompt-fun*
-                (lambda (stream)
                   (call stream))))))
     #+ccl
     (progn
@@ -216,4 +223,5 @@ The arguments for format control or function are:
                        break-level
                        stepping-p inspect-p))))
     #-(or sbcl ccl ecl clisp abcl allegro cmucl)
-    (warn "Trivial Toplevel Prompt does not support this implementation yet. Help in supporting it!")))
+    (warn "Trivial Toplevel Prompt does not support this implementation yet. Help in supporting it!")
+    nil))
