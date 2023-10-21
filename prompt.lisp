@@ -18,7 +18,7 @@ to the state before the last `set-toplevel-prompt' was invoked."))
 Allows to restore the previous state of the prompt in `reset-toplevel-prompt'.")
 
 (defun reset-toplevel-prompt ()
-  "Return the prompt to the state before the last `set-toplevel-prompt'."
+  "Revert the prompt to the state before the last `set-toplevel-prompt'."
   (if *previous-prompting-stack*
       #+sbcl
       (sb-ext:without-package-locks
