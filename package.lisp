@@ -13,5 +13,5 @@ implementation-specific prompts to follow a certain format.
 to the state before the last `set-toplevel-prompt' was invoked."))
 
 #+sbcl
-(when (ignore-errors (find-package :sb-aclrepl))
+(when (find "SB-ACLREPL" *modules* :test #'string=)
   (pushnew :sb-aclrepl *features*))
