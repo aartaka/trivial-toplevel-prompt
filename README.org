@@ -42,7 +42,6 @@ function are (mostly modeled after Allegro CL APIs):
 - The current process/thread name (a string) or NIL when not provided/meaningless.
 - The shortest possible name/nickname of the current package (=cl:*package*=).
 - A number indicating the command/expression number.
-- A boolean indicating whether in break/debug loop.
 - A number indicating the current break/debug level.
 - A boolean indicating whether stepping is enabled.
 - A boolean indicating whether =inspect= is in progress.
