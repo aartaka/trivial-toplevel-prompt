@@ -91,6 +91,7 @@ And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
      (format stream "[~@[~d~]~@[s~*~]~@[i~*~]] "
              debug-level stepping-p inspect-p))
    (format stream "~a~@[(~d)~]: " package-name command-number)))
+;; [4si] CL-USER(29):
 </pre>
 
 <p>
