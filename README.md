@@ -13,13 +13,13 @@ supporting other implementations
 (like <a href="http://www.lispworks.com/documentation/lw80/lw/lw-lispworks-87.htm#lispworks_marker-line-3817">LispWorks with its *prompt*</a>)
 is much appreciated!
 
-<h2 id=getting-started><a href=#getting-started>"Getting Started"</a></h2>
+<h2 id=getting-started><a href=#getting-started>Getting Started</a></h2>
 
 <p>
 Clone the git repository:
 
 <figure><pre><code>git clone https://github.com/aartaka/trivial-toplevel-prompt ~/common-lisp/
-</code></pre><figcaption>Git command cloning trivial-toplevel-prompt</figcaption></figure>
+</code></pre><figcaption></figcaption></figure>
 
 <p>
 And then load <code>:trivial-toplevel-prompt</code> in the REPL:
@@ -27,14 +27,14 @@ And then load <code>:trivial-toplevel-prompt</code> in the REPL:
 <figure><pre><code>(asdf:load-system :trivial-toplevel-prompt)
 ;; or, if you use Quicklisp
 (ql:quickload :trivial-toplevel-prompt)
-</code></pre><figcaption>Loading TTP via ASDF/Quicklisp</figcaption></figure>
+</code></pre><figcaption></figcaption></figure>
 
 <p>
 You can also install Trivial Toplevel Prompt via Guix,
 using the bundled <code>guix.scm</code> file:
 
 <figure><pre><code>guix package -f guix.scm
-</code></pre><figcaption>Guix command to install TTP</figcaption></figure>
+</code></pre><figcaption></figcaption></figure>
 
 <h2 id=apis><a href=#apis>APIs</a></h2>
 
@@ -78,7 +78,7 @@ just skip the process name, print package name and command number.
 
 <figure><pre><code>(trivial-toplevel-prompt:set-toplevel-prompt "~*~a~@[(~d)~]: ")
 ;; CL-USER(7):
-</code></pre><figcaption>Simple prompt</figcaption></figure>
+</code></pre><figcaption></figcaption></figure>
 
 <p>
 And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
@@ -91,7 +91,7 @@ And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
      (format stream "[~@[~d~]~@[s~*~]~@[i~*~]] "
              debug-level stepping-p inspect-p))
    (format stream "~a~@[(~d)~]: " package-name command-number)))
-</code></pre><figcaption>Allegro-style prompt</figcaption></figure>
+</code></pre><figcaption></figcaption></figure>
 
 <p>
 And then reset it:
@@ -100,4 +100,4 @@ And then reset it:
 ;; CL-USER(7):
 (trivial-toplevel-prompt::reset-toplevel-prompt)
 ;; Back to implementation-specific prompt.
-</code></pre><figcaption>Prompt reset</figcaption></figure>
+</code></pre><figcaption></figcaption></figure>
