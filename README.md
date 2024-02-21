@@ -13,7 +13,7 @@ supporting other implementations
 (like <a href="http://www.lispworks.com/documentation/lw80/lw/lw-lispworks-87.htm#lispworks_marker-line-3817">LispWorks with its *prompt*</a>)
 is much appreciated!
 
-<h2 id=getting-started><a href=#getting-started>Getting Started</a></h2>
+<h2>Getting Started</h2>
 
 <p>
 Clone the git repository:
@@ -36,7 +36,7 @@ using the bundled <code>guix.scm</code> file:
 <pre>guix package -f guix.scm
 </pre>
 
-<h2 id=apis><a href=#apis>APIs</a></h2>
+<h2>APIs</h2>
 
 <p>
 The main API function is <code>set-toplevel-prompt</code>.
@@ -70,7 +70,7 @@ so <code>set-toplevel-prompt</code> will be useless for inspect and stepping arg
 <p>
 Then there's CD(reset-toplevel-prompt) to undo the effect of CD(set-toplevel-prompt), basically restoring the previous prompt state.
 
-<h2 id=examples><a href=#examples>Examples</a></h2>
+<h2>Examples</h2>
 
 <p>
 Here's a simple format control example:
