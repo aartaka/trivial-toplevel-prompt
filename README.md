@@ -18,23 +18,23 @@ is much appreciated!
 <p>
 Clone the git repository:
 
-<figure><pre><code>git clone https://github.com/aartaka/trivial-toplevel-prompt ~/common-lisp/
-</code></pre><figcaption></figcaption></figure>
+<pre>git clone https://github.com/aartaka/trivial-toplevel-prompt ~/common-lisp/
+</pre>
 
 <p>
 And then load <code>:trivial-toplevel-prompt</code> in the REPL:
 
-<figure><pre><code>(asdf:load-system :trivial-toplevel-prompt)
+<pre>(asdf:load-system :trivial-toplevel-prompt)
 ;; or, if you use Quicklisp
 (ql:quickload :trivial-toplevel-prompt)
-</code></pre><figcaption></figcaption></figure>
+</pre>
 
 <p>
 You can also install Trivial Toplevel Prompt via Guix,
 using the bundled <code>guix.scm</code> file:
 
-<figure><pre><code>guix package -f guix.scm
-</code></pre><figcaption></figcaption></figure>
+<pre>guix package -f guix.scm
+</pre>
 
 <h2 id=apis><a href=#apis>APIs</a></h2>
 
@@ -76,14 +76,14 @@ Then there's CD(reset-toplevel-prompt) to undo the effect of CD(set-toplevel-pro
 Here's a simple format control example:
 just skip the process name, print package name and command number.
 
-<figure><pre><code>(trivial-toplevel-prompt:set-toplevel-prompt "~*~a~@[(~d)~]: ")
+<pre>(trivial-toplevel-prompt:set-toplevel-prompt "~*~a~@[(~d)~]: ")
 ;; CL-USER(7):
-</code></pre><figcaption></figcaption></figure>
+</pre>
 
 <p>
 And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
 
-<figure><pre><code>(trivial-toplevel-prompt:set-toplevel-prompt
+<pre>(trivial-toplevel-prompt:set-toplevel-prompt
  (lambda (stream process/thread-name package-name
           command-number debug-level stepping-p inspect-p)
    (declare (ignorable process/thread-name))
@@ -91,13 +91,13 @@ And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
      (format stream "[~@[~d~]~@[s~*~]~@[i~*~]] "
              debug-level stepping-p inspect-p))
    (format stream "~a~@[(~d)~]: " package-name command-number)))
-</code></pre><figcaption></figcaption></figure>
+</pre>
 
 <p>
 And then reset it:
 
-<figure><pre><code>(trivial-toplevel-prompt::reset-toplevel-prompt)
+<pre>(trivial-toplevel-prompt::reset-toplevel-prompt)
 ;; CL-USER(7):
 (trivial-toplevel-prompt::reset-toplevel-prompt)
 ;; Back to implementation-specific prompt.
-</code></pre><figcaption></figcaption></figure>
+</pre>
