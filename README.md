@@ -24,7 +24,7 @@ Clone the git repository:
 <p>
 And then load <code>:trivial-toplevel-prompt</code> in the REPL:
 
-<pre>(asdf:load-system :trivial-toplevel-prompt)
+<pre lang=lisp>(asdf:load-system :trivial-toplevel-prompt)
 ;; or, if you use Quicklisp
 (ql:quickload :trivial-toplevel-prompt)
 </pre>
@@ -78,14 +78,14 @@ Then there's
 Here's a simple format control example:
 just skip the process name, print package name and command number.
 
-<pre>(trivial-toplevel-prompt:set-toplevel-prompt "~*~a~@[(~d)~]: ")
+<pre lang=lisp>(trivial-toplevel-prompt:set-toplevel-prompt "~*~a~@[(~d)~]: ")
 ;; CL-USER(7):
 </pre>
 
 <p>
 And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
 
-<pre>(trivial-toplevel-prompt:set-toplevel-prompt
+<pre lang=lisp>(trivial-toplevel-prompt:set-toplevel-prompt
  (lambda (stream process/thread-name package-name
           command-number debug-level stepping-p inspect-p)
    (declare (ignorable process/thread-name))
@@ -99,7 +99,7 @@ And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
 <p>
 And then reset it:
 
-<pre>(trivial-toplevel-prompt:reset-toplevel-prompt)
+<pre lang=lisp>(trivial-toplevel-prompt:reset-toplevel-prompt)
 ;; CL-USER(7):
 (trivial-toplevel-prompt:reset-toplevel-prompt)
 ;; Back to implementation-specific prompt.
