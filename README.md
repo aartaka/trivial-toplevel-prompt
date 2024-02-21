@@ -68,7 +68,9 @@ inspection,
 so <code>set-toplevel-prompt</code> will be useless for inspect and stepping arguments.
 
 <p>
-Then there's CD(reset-toplevel-prompt) to undo the effect of CD(set-toplevel-prompt), basically restoring the previous prompt state.
+Then there's
+<code>reset-toplevel-prompt</code> to undo the effect of
+<code>set-toplevel-prompt</code>, basically restoring the previous prompt state.
 
 </SECTION> <SECTION id=examples><h2><a href=#examples>Examples</a></h2>
 
