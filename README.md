@@ -1,7 +1,7 @@
 <h1>Trivial Toplevel Prompt</h1>
 
 <p>
-Trivial Toplevel Prompt is a petty portability library to set the
+Trivial Toplevel Prompt (TTP) is a petty portability library to set the
 implementation-specific REPL prompt to a new, possibly more useful,
 value. It allows showing the inspect/debug/stepping statuses alongside
 the command number, current package, and current process or thread.
