@@ -99,8 +99,8 @@ And a more involved, Allegro-style (<code>[4si] CL-USER(29):</code>) prompt:
 <p>
 And then reset it:
 
-<pre>(trivial-toplevel-prompt::reset-toplevel-prompt)
+<pre>(trivial-toplevel-prompt:reset-toplevel-prompt)
 ;; CL-USER(7):
-(trivial-toplevel-prompt::reset-toplevel-prompt)
+(trivial-toplevel-prompt:reset-toplevel-prompt)
 ;; Back to implementation-specific prompt.
 </pre>
