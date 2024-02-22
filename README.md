@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <h1>Trivial Toplevel Prompt</h1>
 
 <p>
