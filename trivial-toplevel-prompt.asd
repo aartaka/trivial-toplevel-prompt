@@ -1,7 +1,7 @@
 ;;;; SPDX-FileCopyrightText: Artyom Bologov
 ;;;; SPDX-License-Identifier: BSD-3 Clause
 
-(defsystem "trivial-toplevel-prompt"
+(asdf:defsystem "trivial-toplevel-prompt"
   :description "Portability library to customize REPL prompts."
   :author "Artyom Bologov"
   :homepage "https://github.com/aartaka/trivial-toplevel-prompt"
